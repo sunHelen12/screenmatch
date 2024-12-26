@@ -1,10 +1,14 @@
 package br.com.alura.screenmatch.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public enum Categoria {
     ACAO("Action"),
     ROMANCE("Romance"),
     COMEDIA("Comedy"),
     DRAMA("Drama"),
+    ANIMATION ("Animation"),
     AVENTURA("Adventure"),
     CRIME("Crime");
 
