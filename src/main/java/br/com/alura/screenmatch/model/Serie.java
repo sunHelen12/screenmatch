@@ -22,14 +22,16 @@ public class Serie {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;    
     //@Column(name = "nomeDaSerie") poderiamos trocar o nome da variável no banco de dados
-    @Column(unique = true)//para não repetir titulos de series
+    @Column(unique = true, length = 500)//para não repetir titulos de series    
     private String titulo;
     private Integer totalTemporadas;
     private Double avaliacao;
     @Enumerated(EnumType.STRING)
     private Categoria genero; // Categoria é um enum
+    @Column(length = 500)
     private String atores;
     private String poster;
+    @Column(length = 5000)
     private String sinopse;
     @Transient //não vai mexer nos episodios por enquanto
     private List<Episodio> episodios = new ArrayList<>();
