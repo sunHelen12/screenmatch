@@ -11,11 +11,13 @@ import java.util.Optional;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
+
 import br.com.alura.screenmatch.model.DadosEpisodio;
 import br.com.alura.screenmatch.model.DadosSerie;
 import br.com.alura.screenmatch.model.DadosTemporadas;
 import br.com.alura.screenmatch.model.Episodio;
 import br.com.alura.screenmatch.model.Serie;
+import br.com.alura.screenmatch.repository.SerieRepository;
 import br.com.alura.screenmatch.service.ConsumoApi;
 import br.com.alura.screenmatch.service.ConverteDados;
 
@@ -27,7 +29,13 @@ public class Principal {
 
     private final String ENDERECO = "https://www.omdbapi.com/?t=";
     private final String API_KEY = "&apikey=2e70c955";
-    private List<DadosSerie> dadosSeries = new ArrayList<>();
+    private List<DadosSerie> dadosSeries = new ArrayList<>(); 
+
+    private SerieRepository repositorio;
+
+    public Principal(SerieRepository repositorio) {
+        this.repositorio = repositorio;
+    }
 
     public void exibeMenu() {
         int opcao = -1;
@@ -65,7 +73,9 @@ public class Principal {
 
     private void buscarSerieWeb() {
         DadosSerie dados = getDadosSerie();
-        dadosSeries.add(dados);
+        Serie serie = new Serie(dados);
+        //dadosSeries.add(dados);
+        repositorio.save(serie);
         System.out.println(dados);
     }
 
@@ -155,11 +165,7 @@ public class Principal {
 
     private void listarSeriesBuscadas() {
         System.out.println("\nSéries buscadas:");
-        List<Serie>series = new ArrayList<>();
-        dadosSeries.stream()
-                    .map(d -> new Serie (d))   
-                        .collect(Collectors.toList());     
-        dadosSeries.forEach(System.out::println);
+        List<Serie>series = repositorio.findAll();
         series.stream()
             .sorted(Comparator.comparing(Serie::getGenero))
             .forEach(System.out::println);
