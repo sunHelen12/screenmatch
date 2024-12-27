@@ -1,15 +1,17 @@
 package br.com.alura.screenmatch.model;
 
 import br.com.alura.screenmatch.service.traducao.ConsultaMyMemory;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,10 +35,11 @@ public class Serie {
     private String poster;
     @Column(length = 5000)
     private String sinopse;
-    @Transient //não vai mexer nos episodios por enquanto
+    //@Transient não vai mexer nos episodios por enquanto
+    @OneToMany(mappedBy = "serie", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Episodio> episodios = new ArrayList<>();
-    public Serie(){      
-    }
+   
+    public Serie(){}
 
     public Serie(DadosSerie dadosSerie){
             this.titulo = dadosSerie.titulo();
@@ -57,6 +60,13 @@ public class Serie {
 
     public void setId(Long id) {
         this.id = id;
+    }    public List<Episodio> getEpisodios() {
+        return episodios;
+    }
+
+    public void setEpisodios(List<Episodio> episodios) {
+        episodios.forEach(e -> e.setSerie(this));
+        this.episodios = episodios;
     }
 
     public String getTitulo() {
@@ -123,6 +133,7 @@ public class Serie {
                ", Avaliação= " + avaliacao +
                ", Atores= " + atores +
                ", Pôster= " + poster +
-               ", Sinopse= " + sinopse;
+               ", Sinopse= " + sinopse +
+               ", Episódios= " + episodios;
     }
 }
