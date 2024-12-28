@@ -12,7 +12,7 @@ import br.com.alura.screenmatch.service.SerieService;
 
 @RestController
 @RequestMapping("/series")
-public class SerieCotntroller { 
+public class SerieController { 
     @Autowired
     private SerieService servico;
 
@@ -25,6 +25,11 @@ public class SerieCotntroller {
     @GetMapping("/top5")
     public List<SerieDTO> obterTop5Series(){
         return servico.obterTop5Series();
+    }
+
+    @GetMapping("/lancamentos")
+    public List<SerieDTO> obterLancamentos() {
+        return servico.obterLancamentos();
     }
 
     
